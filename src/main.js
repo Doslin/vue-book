@@ -5,6 +5,7 @@ import store from './store'
 import './assets/styles/icon.css'
 import './assets/fonts/daysOne.css'
 import './assets/styles/global.scss'
+import 'lib-flexible'
 
 Vue.config.productionTip = false
 
