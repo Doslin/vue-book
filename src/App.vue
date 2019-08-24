@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <span class="test">ABCDEFG</span>
-      <div></div>
-      <span class="text">QWETYY</span>
+        <div></div>
+        <span class="text">QWETYY</span>
         <router-view/>
     </div>
 </template>
@@ -17,14 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <style lang="scss" type="text/scss">
     @import './assets/styles/global.scss';
+
     #app {
         .test {
             font-family: 'Days One';
             font-size: 75px;
         }
         .text {
-          font-family: 'Days One';
-          font-size: px2rem(35);
+            font-family: 'Days One';
+            font-size: px2rem(35);
         }
     }
 </style>
