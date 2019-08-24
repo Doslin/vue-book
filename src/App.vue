@@ -7,7 +7,17 @@
     </div>
 </template>
 <script>
-export default {}
+    import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['test'])
+  },
+  mounted () {
+    this.$store.dispatch('setTest', 111).then(() => {
+      console.log(this.test)
+    })
+  }
+}
 document.addEventListener('DOMContentLoaded', () => {
   let fontSize = window.innerWidth / 10
   // fontSize = fontSize > 50 ? 50 : fontSize
@@ -17,15 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <style lang="scss" type="text/scss">
     @import './assets/styles/global.scss';
-
     #app {
         .test {
             font-family: 'Days One';
-            font-size: 75px;
-        }
-        .text {
-            font-family: 'Days One';
-            font-size: px2rem(35);
+            font-size: 35px;
         }
     }
 </style>
