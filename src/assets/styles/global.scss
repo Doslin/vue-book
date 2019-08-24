@@ -3,7 +3,7 @@
 @import './flapCard';
 @import './home';
 
-$ratio: 400 / 10;
+$ratio: 350 /10 ;
 
 @function px2rem($px) {
   @return $px / $ratio + rem;
