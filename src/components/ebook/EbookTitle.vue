@@ -1,0 +1,73 @@
+<template>
+  <transition name="slide-down">
+    <div class="title-wrapper" v-show="menuVisible">
+      <div class="left">
+        <span class="icon-back" @click="back"></span>
+      </div>
+      <div class="right">
+        <div class="icon-wrapper">
+          <span class="icon-shelf"></span>
+        </div>
+        <div class="icon-wrapper">
+          <span class="icon-cart"></span>
+        </div>
+        <div class="icon-wrapper">
+          <span class="icon-more"></span>
+        </div>
+      </div>
+    </div>
+  </transition>
+</template>
+
+<script>
+  import { ebookMixin } from '../../utils/mixin'
+  export default {
+    name: 'EbookTitle',
+    mixin: [ebookMixin],
+    methods: {
+      back () {
+        console.log('back')
+      }
+    }
+  }
+</script>
+
+<style scoped lang='scss'>
+  @import "../../assets/styles/global";
+  .title-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    display: flex;
+    width: 100%;
+    height: 48px;
+    background: white;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, .15);
+    font-size: 20px;
+    .left {
+      flex: 0 0 60px;
+      @include center;
+      /*margin-left: 15px;*/
+    }
+
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+
+      .icon-wrapper {
+        flex: 0 0 40px;
+        @include center;
+
+        .icon-shelf {
+          font-size: 22px;
+        }
+        .icon-cart {
+          font-size: 22px;
+        }
+
+      }
+    }
+  }
+</style>
