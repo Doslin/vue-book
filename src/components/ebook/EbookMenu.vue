@@ -34,8 +34,8 @@
   }
 </script>
 
-<style scoped lang='scss'>
-  @import "../../assets/styles/global";
+<style scoped lang='scss' type="text/scss">
+  @import "../../assets/styles/global.scss";
 
   .menu-wrapper {
     position: absolute;
@@ -44,7 +44,7 @@
     z-index: 102;
     display: flex;
     width: 100%;
-    height: px2rem(48);
+    height: 48px;
     background: white;
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
 
@@ -57,11 +57,11 @@
       @include center;
 
       .icon-progress {
-        font-size: px2rem(22);
+        font-size: 22px;
       }
 
       .icon-bright {
-        font-size: px2rem(24);
+        font-size: 24px;
       }
     }
   }

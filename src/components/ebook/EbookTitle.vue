@@ -23,7 +23,7 @@
   import { ebookMixin } from '../../utils/mixin'
   export default {
     name: 'EbookTitle',
-    mixin: [ebookMixin],
+    mixins: [ebookMixin],
     methods: {
       back () {
         console.log('back')
@@ -32,8 +32,8 @@
   }
 </script>
 
-<style scoped lang='scss'>
-  @import "../../assets/styles/global";
+<style scoped lang='scss' type="text/scss">
+  @import "../../assets/styles/global.scss";
   .title-wrapper {
     position: absolute;
     top: 0;
@@ -64,9 +64,8 @@
           font-size: 22px;
         }
         .icon-cart {
-          font-size: 22px;
+          font-size: px2rem(22);
         }
-
       }
     }
   }
