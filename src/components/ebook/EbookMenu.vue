@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="slide-up">
-      <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible}"
+      <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible || settingVisible >= 0 }"
            v-show="menuVisible">
         <div class="icon-wrapper">
           <span class="icon-menu" @click="showSetting(3)"></span>
@@ -30,6 +30,7 @@
     mixins: [ebookMixin],
     methods: {
       showSetting(key) {
+        console.log(key)
         this.setSettingVisible(key)
       }
     },

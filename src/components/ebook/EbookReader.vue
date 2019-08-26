@@ -18,8 +18,9 @@ global.ePub = Epub
       initEpub () {
         // http://192.168.52.33:8081/epub
         // http://192.168.52.33:8081/
-        const baseUrl = 'http://192.168.52.33:8081/epub/' + this.fileName + '.epub'
+        const baseUrl = 'http://192.168.1.24:8081/epub/' + this.fileName + '.epub'
         this.book = new Epub(baseUrl)
+        this.setCurrentBook(this.book)
         this.rendition = this.book.renderTo('read', {
           width: innerWidth,
           height: innerHeight,
@@ -62,10 +63,14 @@ global.ePub = Epub
         }
       },
       toggleTitleAndMenu () {
+        if (this.menuVisible) {
+          this.setSettingVisible(-1)
+        }
         this.setMenuVisible(!this.menuVisible)
       },
       hideTitleAndMenu () {
-        this.$store.dispatch('setMenuVisible', false)
+        this.setMenuVisible(false)
+        this.setSettingVisible(-1)
       }
     },
     mounted () {
