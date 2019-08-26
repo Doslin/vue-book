@@ -18,7 +18,7 @@ global.ePub = Epub
       initEpub () {
         // http://192.168.52.33:8081/epub
         // http://192.168.52.33:8081/
-        const baseUrl = 'http://192.168.1.62:8081/epub/' + this.fileName + '.epub'
+        const baseUrl = 'http://192.168.52.33:8081/epub/' + this.fileName + '.epub'
         this.book = new Epub(baseUrl)
         this.rendition = this.book.renderTo('read', {
           width: innerWidth,

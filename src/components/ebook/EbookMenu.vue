@@ -1,36 +1,42 @@
 <template>
-  <transition name="slide-up">
-    <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible}"
-         v-show="menuVisible">
-      <div class="icon-wrapper">
-        <span class="icon-menu" @click="showSetting(3)"></span>
+  <div>
+    <transition name="slide-up">
+      <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible}"
+           v-show="menuVisible">
+        <div class="icon-wrapper">
+          <span class="icon-menu" @click="showSetting(3)"></span>
+        </div>
+        <div class="icon-wrapper">
+          <span class="icon-progress" @click="showSetting(2)"></span>
+        </div>
+        <div class="icon-wrapper">
+          <span class="icon-bright" @click="showSetting(1)"></span>
+        </div>
+        <div class="icon-wrapper">
+          <span class="icon-a" @click="showSetting(0)">A</span>
+        </div>
       </div>
-      <div class="icon-wrapper">
-        <span class="icon-progress" @click="showSetting(2)"></span>
-      </div>
-      <div class="icon-wrapper">
-        <span class="icon-bright" @click="showSetting(1)"></span>
-      </div>
-      <div class="icon-wrapper">
-        <span class="icon-a" @click="showSetting(0)">A</span>
-      </div>
-    </div>
-  </transition>
+    </transition>
+    <ebook-setting-font></ebook-setting-font>
+  </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import EbookSettingFont from './EbookSettingFont'
+  import { ebookMixin } from '../../utils/mixin'
+
   export default {
     name: 'EbookMenu',
-    computed: {
-      ...mapGetters([
-        'menuVisible'
-      ])
-    },
+    mixins: [ebookMixin],
     methods: {
-      showSetting (key) {
+      showSetting(key) {
+        this.setSettingVisible(key)
       }
+    },
+    components: {
+      EbookSettingFont
     }
+
   }
 </script>
 

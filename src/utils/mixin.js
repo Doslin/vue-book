@@ -4,7 +4,8 @@ export const ebookMixin = {
   computed: {
     ...mapGetters([
       'fileName',
-      'menuVisible'
+      'menuVisible',
+      'settingVisible'
     ])
   },
   methods: {
