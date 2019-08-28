@@ -7,6 +7,7 @@
 <script>
 import Epub from 'epubjs'
 import { ebookMixin } from '../../utils/mixin'
+import { getFontFamily, saveFontFamily } from '../../utils/localStorage'
 
 global.ePub = Epub
 
@@ -18,7 +19,7 @@ global.ePub = Epub
       initEpub () {
         // http://192.168.52.33:8081/epub
         // http://192.168.52.33:8081/
-        const baseUrl = 'http://192.168.1.24:8081/epub/' + this.fileName + '.epub'
+        const baseUrl = 'http://192.168.52.33:8081/epub/' + this.fileName + '.epub'
         this.book = new Epub(baseUrl)
         this.setCurrentBook(this.book)
         this.rendition = this.book.renderTo('read', {
@@ -26,7 +27,15 @@ global.ePub = Epub
           height: innerHeight,
           method: 'default'
         })
-        this.rendition.display()
+        this.rendition.display().then(() => {
+          let font = getFontFamily(this.fileName)
+          if (!font) {
+            saveFontFamily(this.fileName, this.defaultFontFamily)
+          } else {
+            this.rendition.themes.font(font)
+            this.setDefaultFontFamily(font)
+          }
+        })
         // rendition
         this.rendition.on('touchstart', event => {
           this.touchStartX = event.changedTouches[0].clientX
@@ -49,6 +58,16 @@ global.ePub = Epub
           event.stopPropagation()
           console.log(offetX, time)
         })
+        this.rendition.hooks.content.register(contents => {
+          Promise.all([
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`)
+          ]).then(() => {
+            console.log('字体全部加载完毕')
+          })
+        })
       },
       prevPage () {
         if (this.rendition) {
@@ -65,12 +84,14 @@ global.ePub = Epub
       toggleTitleAndMenu () {
         if (this.menuVisible) {
           this.setSettingVisible(-1)
+          this.setFontFamilyVisible(false)
         }
         this.setMenuVisible(!this.menuVisible)
       },
       hideTitleAndMenu () {
         this.setMenuVisible(false)
         this.setSettingVisible(-1)
+        this.setFontFamilyVisible(false)
       }
     },
     mounted () {

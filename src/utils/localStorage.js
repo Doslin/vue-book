@@ -1,5 +1,7 @@
+// 可以在json和对象之间互相转化 利用浏览器的localStorage
+// cookie的大小只有4K  localStorage为5M
 import Storage from 'web-storage-cache'
-
+// 创建localStorage的变量
 const localStorage = new Storage()
 
 export function getLocalStorage(key) {
@@ -121,7 +123,8 @@ export function getBookObject(fileName, key) {
     return null
   }
 }
-
+// 用来存储fileName key value
+// fileName 下面又包含一个key value的字符串   存储变为json 获取又变为对象
 export function setBookObject(fileName, key, value) {
   let book = {}
   if (getLocalStorage(`${fileName}-info`)) {

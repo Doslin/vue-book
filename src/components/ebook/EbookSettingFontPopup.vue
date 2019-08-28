@@ -8,7 +8,8 @@
         <span class="ebook-popup-title-text">选择字体</span>
       </div>
       <div class="ebook-popup-list-wrapper">
-        <div class="ebook-popup-item" v-for='(item, index) in fontFamilyList' :key="index">
+        <div class="ebook-popup-item" v-for='(item, index) in fontFamilyList'
+            @click="setFontFamily(item.font)" :key="index">
           <div class="ebook-popup-item-text" :class="{'selected': isSelected(item)}">{{ item.font }}</div>
           <div class="ebook-popup-item-check" v-if="isSelected(item)">
             <span class="icon-check"></span>
@@ -22,6 +23,8 @@
 <script>
   import { ebookMixin } from '../../utils/mixin'
   import { FONT_FAMILY } from '../../utils/book'
+  import { saveFontFamily } from '../../utils/localStorage'
+
   export default {
     name: 'EbookSettingFontPopup',
     mixins: [ebookMixin],
@@ -39,6 +42,15 @@
       },
       isSelected (item) {
         return this.defaultFontFamily === item.font
+      },
+      setFontFamily(font) {
+        this.setDefaultFontFamily(font)
+        saveFontFamily(this.fileName, font)
+        if (font === 'Default') {
+          this.currentBook.rendition.themes.font('Times New Roman')
+        } else {
+          this.currentBook.rendition.themes.font(font)
+        }
       }
     }
   }
