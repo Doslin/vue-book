@@ -7,7 +7,15 @@
 <script>
   import Epub from 'epubjs'
   import { ebookMixin } from '../../utils/mixin'
-  import { getFontFamily, saveFontFamily, saveFontSize, getFontSize, getTheme, saveTheme } from '../../utils/localStorage'
+  import {
+    getFontFamily,
+    saveFontFamily,
+    saveFontSize,
+    getFontSize,
+    getTheme,
+    saveTheme,
+    getLocation
+  } from '../../utils/localStorage'
 
   global.ePub = Epub
 
@@ -28,8 +36,8 @@
           return this.book.locations.generate(750 * (window.innerWidth / 375) *
             (getFontSize(this.fileName) / 16))
         }).then(locations => {
-          // console.log(locations)
           this.setBookAvailable(true)
+          this.refreshLocation()
         })
       },
       initFontFamily() {
@@ -71,12 +79,22 @@
           height: innerHeight,
           method: 'default'
         })
-        this.rendition.display().then(() => {
-          this.initFontSize()
-          this.initFontFamily()
-          this.initTheme()
-          this.initGlobalStyle()
-        })
+        const location = getLocation(this.fileName)
+        if (location) {
+          this.disPlay(location, () => {
+            this.initFontSize()
+            this.initFontFamily()
+            this.initTheme()
+            this.initGlobalStyle()
+          })
+        } else {
+          this.disPlay(null, () => {
+            this.initFontSize()
+            this.initFontFamily()
+            this.initTheme()
+            this.initGlobalStyle()
+          })
+        }
         this.rendition.hooks.content.register(contents => {
           Promise.all([
             contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
@@ -112,13 +130,17 @@
       },
       prevPage() {
         if (this.rendition) {
-          this.rendition.prev()
+          this.rendition.prev().then(() => {
+            this.refreshLocation()
+          })
           this.hideTitleAndMenu()
         }
       },
       nextPage () {
         if (this.rendition) {
-          this.rendition.next()
+          this.rendition.next().then(() => {
+            this.refreshLocation()
+          })
           this.hideTitleAndMenu()
         }
       },

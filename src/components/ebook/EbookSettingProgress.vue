@@ -3,7 +3,7 @@
       <div class="setting-wrapper" v-show="menuVisible && settingVisible === 2" >
         <div class="setting-progress" >
           <div class="read-time-wrapper">
-            <span class="read-time-text">阅读进度</span>
+            <span class="read-time-text">{{getReadTimeTest()}}</span>
             <span class="icon-forward"></span>
           </div>
           <div class="progress-wrapper">
@@ -34,6 +34,8 @@
 
 <script>
   import { ebookMixin } from '../../utils/mixin'
+  import { getReadTimeByMinute } from '../../utils/book'
+  import { getReadTime } from '../../utils/localStorage'
 
   export default {
     name: 'EbookSettingProgress',
@@ -59,7 +61,8 @@
       displayProgress () {
         // cfi也是定位
         const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
-        this.currentBook.rendition.display(cfi)
+        console.log('displayProgress：' + cfi)
+        this.disPlay(cfi)
       },
       onProgressInput (progress) {
         this.setProgress(progress)
@@ -70,6 +73,7 @@
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
       prevSection () {
+        console.log('this.section' + this.section)
         if (this.section > 0 && this.bookAvailable) {
           this.setSection(this.section - 1).then(() => {
             this.disPlaySection()
@@ -77,6 +81,7 @@
         }
       },
       nextSection () {
+        console.log('this.section' + this.section)
         if (this.section < this.currentBook.spine.length - 1 && this.bookAvailable) {
           this.setSection(this.section + 1).then(() => {
             this.disPlaySection()
@@ -86,15 +91,20 @@
       disPlaySection () {
         const sectionInfo = this.currentBook.section(this.section)
         if (sectionInfo && sectionInfo.href) {
-          this.currentBook.rendition.display(sectionInfo.href)
-          this.refreshLocation()
+          this.disPlay(sectionInfo.href)
         }
       },
-      refreshLocation () {
-        const currentLocation = this.currentBook.rendition.currentLocation()
-        const progress = this.currentBook.locations.percentageFromCfi(
-        currentLocation.start.cfi)
-        this.setProgress(Math.floor(progress * 100))
+      getReadTimeTest () {
+        return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+      },
+      getReadTimeByMinute () {
+        const readTime = getReadTime(this.fileName)
+        console.log(readTime)
+        if (!readTime) {
+          return 0
+        } else {
+          return Math.ceil(readTime / 60)
+        }
       }
     },
     updated() {

@@ -1,6 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList } from './book'
 import { addCss, removeAllCss } from './utils'
+import { saveLocation } from './localStorage'
 
 export const ebookMixin = {
   computed: {
@@ -74,6 +75,28 @@ export const ebookMixin = {
           this.setDefaultTheme('Default')
           addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`)
           break
+      }
+    },
+    refreshLocation () {
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      const startCfi = currentLocation.start.cfi
+      const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+      console.log(progress)
+      this.setProgress(Math.floor(progress * 100))
+      this.setSection(currentLocation.start.index)
+      saveLocation(this.fileName, startCfi)
+    },
+    disPlay(target, cb) {
+      if (target) {
+        this.currentBook.rendition.display(target).then(() => {
+          this.refreshLocation()
+          if (cb) cb()
+        })
+      } else {
+        this.currentBook.rendition.display().then(() => {
+          this.refreshLocation()
+          if (cb) cb()
+        })
       }
     }
   }
