@@ -9,6 +9,7 @@ export function realPx(px) {
 }
 
 export function addCss(href) {
+  console.log(href)
   const link = document.createElement('link')
   link.setAttribute('rel', 'stylesheet')
   link.setAttribute('type', 'text/css')
