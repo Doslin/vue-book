@@ -7,8 +7,8 @@
             <span class="icon-forward"></span>
           </div>
           <div class="progress-wrapper">
-            <div class="progress-icon-wrapper">
-              <span class="icon-back" @click="prevSection()"></span>
+            <div class="progress-icon-wrapper" @click="prevSection()">
+              <span class="icon-back" ></span>
             </div>
             <input class="progress" type="range"
                    max="100"
@@ -24,7 +24,8 @@
             </div>
           </div>
           <div class="text-wrapper">
-            <span>{{bookAvailable ? progress + '%' : '加载中...'}}</span>
+            <span class="progress-section-text">{{getSectionName}}</span>
+            <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
           </div>
         </div>
       </div>
@@ -37,7 +38,17 @@
   export default {
     name: 'EbookSettingProgress',
     mixins: [ebookMixin],
-
+    computed: {
+      getSectionName() {
+        if (this.section) {
+          const sectionInfo = this.currentBook.section(this.section)
+          if (sectionInfo && sectionInfo.href) {
+            return this.currentBook.navigation.get(sectionInfo.href).label
+          }
+        }
+        return ''
+      }
+    },
     methods: {
       onProgressChange (progress) {
         this.setProgress(progress).then(() => {
@@ -52,13 +63,42 @@
       },
       onProgressInput (progress) {
         this.setProgress(progress)
+        this.updateProgressBg()
       },
       updateProgressBg () {
         // 获取到progress的dom设置backgroundSize
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
-      prevSection () {},
-      nextSection () {}
+      prevSection () {
+        if (this.section > 0 && this.bookAvailable) {
+          this.setSection(this.section - 1).then(() => {
+            this.disPlaySection()
+          })
+        }
+      },
+      nextSection () {
+        if (this.section < this.currentBook.spine.length - 1 && this.bookAvailable) {
+          this.setSection(this.section + 1).then(() => {
+            this.disPlaySection()
+          })
+        }
+      },
+      disPlaySection () {
+        const sectionInfo = this.currentBook.section(this.section)
+        if (sectionInfo && sectionInfo.href) {
+          this.currentBook.rendition.display(sectionInfo.href)
+          this.refreshLocation()
+        }
+      },
+      refreshLocation () {
+        const currentLocation = this.currentBook.rendition.currentLocation()
+        const progress = this.currentBook.locations.percentageFromCfi(
+        currentLocation.start.cfi)
+        this.setProgress(Math.floor(progress * 100))
+      }
+    },
+    updated() {
+      this.updateProgressBg()
     }
   }
 </script>
@@ -123,7 +163,14 @@
         width: 100%;
         color: #333;
         font-size: px2rem(12);
-        text-align: center;
+        /*text-align: center;*/
+        padding: 0 px2rem(15);
+        box-sizing: border-box;
+        @include center;
+        .progress-section-text {
+          /*限定在一行中显示  超出时候显示省略号 */
+          @include ellipsis
+        }
       }
     }
   }
