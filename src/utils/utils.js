@@ -1,3 +1,5 @@
+import { getReadTime } from './localStorage'
+
 export function px2rem(px) {
   const ratio = 375 / 10
   return px / ratio
@@ -31,6 +33,16 @@ export function removeAllCss() {
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+}
+
+export function getReadTimeByMinute (fileName) {
+  const readTime = getReadTime(fileName)
+  console.log(readTime)
+  if (!readTime) {
+    return 0
+  } else {
+    return Math.ceil(readTime / 60)
+  }
 }
 
 export function os() {

@@ -32,6 +32,7 @@
         this.setCurrentBook(this.book)
         this.initRendition()
         this.initGesture()
+        this.parseBook()
         this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375) *
             (getFontSize(this.fileName) / 16))
@@ -128,6 +129,17 @@
           event.stopPropagation()
         })
       },
+      parseBook () {
+        this.book.loaded.cover.then(cover => {
+          this.book.archive.createUrl(cover).then(url => {
+            this.setCover(url)
+            console.log(url)
+          })
+        })
+        this.book.loaded.metadata.then(metadata => {
+          this.setMetadata(metadata)
+        })
+      },
       prevPage() {
         if (this.rendition) {
           this.rendition.prev().then(() => {
@@ -150,11 +162,6 @@
           this.setFontFamilyVisible(false)
         }
         this.setMenuVisible(!this.menuVisible)
-      },
-      hideTitleAndMenu() {
-        this.setMenuVisible(false)
-        this.setSettingVisible(-1)
-        this.setFontFamilyVisible(false)
       }
     },
     mounted() {
