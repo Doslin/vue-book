@@ -39,8 +39,24 @@
     mixins: [ebookMixin],
 
     methods: {
-      onProgressChange () {},
-      onProgressInput () {},
+      onProgressChange (progress) {
+        this.setProgress(progress).then(() => {
+          this.displayProgress()
+          this.updateProgressBg()
+        })
+      },
+      displayProgress () {
+        // cfi也是定位
+        const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
+        this.currentBook.rendition.display(cfi)
+      },
+      onProgressInput (progress) {
+        this.setProgress(progress)
+      },
+      updateProgressBg () {
+        // 获取到progress的dom设置backgroundSize
+        this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
+      },
       prevSection () {},
       nextSection () {}
     }
@@ -85,9 +101,7 @@
           width: 100%;
           -webkit-appearance: none;
           height: px2rem(2);
-          background: -webkit-linear-gradient(#999, #999) no-repeat, #ddd;
           margin: px2rem(0) px2rem(10);
-          background-size: 0 100% !important;
           &:focus {
             outline: none;
           }
