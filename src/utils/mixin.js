@@ -79,13 +79,15 @@ export const ebookMixin = {
     },
     refreshLocation () {
       const currentLocation = this.currentBook.rendition.currentLocation()
-      const startCfi = currentLocation.start.cfi
-      const progress = this.currentBook.locations.percentageFromCfi(startCfi)
-      console.log(progress)
-      this.setProgress(Math.floor(progress * 100))
-      this.setSection(currentLocation.start.index)
-      saveLocation(this.fileName, startCfi)
+      if (currentLocation && currentLocation.start) {
+        const startCfi = currentLocation.start.cfi
+        const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+        this.setProgress(Math.floor(progress * 100))
+        this.setSection(currentLocation.start.index)
+        saveLocation(this.fileName, startCfi)
+      }
     },
+    // 加入一个cb回调就是为了解决差异化的问题  实现个性化的需求
     disPlay(target, cb) {
       if (target) {
         this.currentBook.rendition.display(target).then(() => {
