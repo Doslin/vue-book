@@ -22,7 +22,7 @@
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "epubjs": "^0.3.85",
+    "epubjs": "^0.3.89",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "install": "^0.13.0",
